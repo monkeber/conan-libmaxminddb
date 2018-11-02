@@ -5,9 +5,9 @@ import os
 class MaxminddbConan(ConanFile):
     name = "maxminddb"
     version = "1.3.2"
-    license = "<Put the package license here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Maxminddb here>"
+    url = "https://github.com/monkeber/conan-libmaxminddb"
+    description = "The libmaxminddb library provides a C library for reading MaxMind DB " \
+        "files, including the GeoIP2 databases from MaxMind"
     settings = "os", "compiler", "build_type", "arch"
 
     def source(self):
@@ -23,7 +23,6 @@ class MaxminddbConan(ConanFile):
         env_build.make()
 
     def package(self):
-        self.copy("*.h", dst="include", src="libmaxminddb")
         self.copy("*maxminddb.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.so", dst="lib", keep_path=False)
