@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/monkeber/Projects/maxminddb-conan/test_package/example.cpp
+iostream
+-
+maxminddb.h
+/home/monkeber/Projects/maxminddb-conan/test_package/maxminddb.h
+
