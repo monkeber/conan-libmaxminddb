@@ -3,13 +3,17 @@ env:
     - CONAN_REFERENCE: "maxminddb/1.3.2"
     - CONAN_REMOTE: "monkeber"
     - CONAN_CHANNEL: "stable"
-    - CONAN_GCC_VERSIONS: 7
 
 linux:
   os: linux
   sudo: required
   language: python
   python: "3.6"
+
+addons:
+  apt:
+    packages:
+      - g++-7
 
 install:
   - python -m pip install --user --upgrade pip
@@ -18,4 +22,4 @@ install:
   - conan user
 
 script:
-  conan create . ${CONAN_REFERENCE}@${CONAN_REMOTE}/${CONAN_CHANNEL}
+  conan create . ${CONAN_REFERENCE}@${CONAN_REMOTE}/${CONAN_CHANNEL} -s compiler.version=7
