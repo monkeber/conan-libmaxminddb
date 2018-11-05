@@ -9,6 +9,7 @@ class MaxminddbConan(ConanFile):
     description = "The libmaxminddb library provides a C library for reading MaxMind DB " \
         "files, including the GeoIP2 databases from MaxMind"
     settings = "os", "compiler", "build_type", "arch"
+    build_policy = "always"
 
     def source(self):
         tools.download("https://github.com/maxmind/libmaxminddb/releases/download/{0}/" \
