@@ -24,4 +24,4 @@ install:
   - conan user
 
 script:
-  conan create . ${CONAN_REFERENCE}@${CONAN_REMOTE}/${CONAN_CHANNEL} -s compiler.version=7 -s libcxx=libstdc++11
+  conan create . ${CONAN_REFERENCE}@${CONAN_REMOTE}/${CONAN_CHANNEL} -s compiler.version=7 -s compiler.libcxx=libstdc++11
