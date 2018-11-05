@@ -1,0 +1,19 @@
+env:
+  global:
+    - CONAN_REFERENCE: "maxminddb/1.3.2"
+    - CONAN_REMOTE: "monkeber"
+    - CONAN_CHANNEL: "stable"
+    - CONAN_GCC_VERSIONS: 7
+
+linux:
+  os: linux
+  language: python
+  python: "3.6"
+
+install:
+  - pip install conan --upgrade
+  - pip install conan_package_tools
+  - conan user
+
+script:
+  conan create . ${CONAN_REFERENCE}@${CONAN_REMOTE}/${CONAN_CHANNEL}
