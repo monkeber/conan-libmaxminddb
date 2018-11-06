@@ -26,6 +26,7 @@ class MaxminddbConan(ConanFile):
         env_build.make()
 
     def package(self):
+        self.copy("*.h*", dst="include", keep_path=False)
         self.copy("*maxminddb.lib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
         if self.options.shared:
