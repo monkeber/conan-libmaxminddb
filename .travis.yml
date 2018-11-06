@@ -1,8 +1,11 @@
 env:
   global:
+    - CONAN_USERNAME: "monkeber"
     - CONAN_REFERENCE: "maxminddb/1.3.2"
     - CONAN_REMOTE: "monkeber"
     - CONAN_CHANNEL: "stable"
+    - CONAN_GCC_VERSIONS: 8
+    - CONAN_DOCKER_IMAGE: "lasote/conangcc8"
     - CC_COMPILER: "gcc-8"
     - CXX_COMPILER: "g++-8"
 
@@ -11,6 +14,8 @@ linux:
   sudo: required
   language: python
   python: "3.6"
+  services:
+    - docker
 
 addons:
   apt:
@@ -27,4 +32,4 @@ install:
   - conan user
 
 script:
-  conan create . ${CONAN_REFERENCE}@${CONAN_REMOTE}/${CONAN_CHANNEL} -s compiler.version=8 -s compiler.libcxx=libstdc++11
+  python build.py
