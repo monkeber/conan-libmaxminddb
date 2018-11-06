@@ -6,8 +6,6 @@ env:
     - CONAN_CHANNEL: "stable"
     - CONAN_GCC_VERSIONS: 8
     - CONAN_DOCKER_IMAGE: "lasote/conangcc8"
-    - CC_COMPILER: "gcc-8"
-    - CXX_COMPILER: "g++-8"
 
 linux:
   os: linux
@@ -16,14 +14,6 @@ linux:
   python: "3.6"
   services:
     - docker
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-8
-      - gcc-8
 
 install:
   - python -m pip install --user --upgrade pip
