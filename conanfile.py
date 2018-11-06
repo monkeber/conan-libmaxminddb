@@ -22,7 +22,7 @@ class MaxminddbConan(ConanFile):
     def build(self):
         env_build = AutoToolsBuildEnvironment(self)
         env_build.configure(configure_dir="libmaxminddb-{}".format(self.version))
-        self.run("rsync -a libmaxminddb-{}/ .".format(self.version))
+        self.run("cp -r libmaxminddb-{}/* .".format(self.version))
         env_build.make()
 
     def package(self):
