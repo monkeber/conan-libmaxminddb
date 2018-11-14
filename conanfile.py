@@ -21,7 +21,11 @@ class MaxminddbConan(ConanFile):
 
     def build(self):
         env_build = AutoToolsBuildEnvironment(self)
-        env_build.configure(configure_dir="libmaxminddb-{}".format(self.version))
+        args = list()
+        if self.settings.build_type == "Debug":
+            args.append("--enable-debug")
+        env_build.configure(configure_dir="libmaxminddb-{}".format(self.version),
+            args=args)
         self.run("cp -r libmaxminddb-{}/* .".format(self.version))
         env_build.make()
 
