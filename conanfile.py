@@ -28,6 +28,7 @@ class MaxminddbConan(ConanFile):
             args=args)
         self.run("cp -r libmaxminddb-{}/* .".format(self.version))
         env_build.make()
+        env_build.install()
 
     def package(self):
         self.copy("*.h*", dst="include", keep_path=False)
