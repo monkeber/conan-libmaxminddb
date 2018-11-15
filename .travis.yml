@@ -31,9 +31,9 @@ matrix:
       env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=lasote/conangcc8
 
 install:
-  - python -m pip install --user --upgrade pip
-  - pip install --user conan --upgrade
-  - pip install --user conan_package_tools
+  - python -m pip install --upgrade pip
+  - pip install conan --upgrade
+  - pip install conan_package_tools
   - conan user
 
 script:
