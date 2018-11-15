@@ -23,14 +23,13 @@ class MaxminddbConan(ConanFile):
         env_build = AutoToolsBuildEnvironment(self)
 
         args = list()
-        args.append("--std=gnu11")
         if self.settings.build_type == "Debug":
             args.append("--enable-debug")
 
         env_build.configure(configure_dir="libmaxminddb-{}".format(self.version),
             args=args)
         self.run("cp -r libmaxminddb-{}/* .".format(self.version))
-        env_build.make()
+        env_build.make(args=["CXXFLAGS:=$(CXXFLAGS) -std=c11"])
         env_build.install()
 
     def package(self):
