@@ -4,16 +4,31 @@ env:
     - CONAN_REFERENCE: "maxminddb/1.3.2"
     - CONAN_REMOTE: "monkeber"
     - CONAN_CHANNEL: "stable"
-    - CONAN_GCC_VERSIONS: 8
-    - CONAN_DOCKER_IMAGE: "lasote/conangcc8"
 
-linux:
+linux: &linux
   os: linux
   sudo: required
   language: python
   python: "3.6"
   services:
     - docker
+
+matrix:
+  include:
+    - <<: *linux
+      env: CONAN_GCC_VERSIONS=4 CONAN_DOCKER_IMAGE=lasote/conangcc4
+
+    - <<: *linux
+      env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=lasote/conangcc5
+
+    - <<: *linux
+      env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=lasote/conangcc6
+
+    - <<: *linux
+      env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=lasote/conangcc7
+
+    - <<: *linux
+      env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=lasote/conangcc8
 
 install:
   - python -m pip install --user --upgrade pip
