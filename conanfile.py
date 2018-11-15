@@ -29,7 +29,7 @@ class MaxminddbConan(ConanFile):
         env_build.configure(configure_dir="libmaxminddb-{}".format(self.version),
             args=args)
         self.run("cp -r libmaxminddb-{}/* .".format(self.version))
-        env_build.make(args=["CXXFLAGS:=$(CXXFLAGS) -std=c99"])
+        env_build.make(args=["CXXFLAGS:=$(CXXFLAGS) -std=gnu99"])
         env_build.install()
 
     def package(self):
