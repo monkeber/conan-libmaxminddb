@@ -12,6 +12,7 @@ class MaxminddbConan(ConanFile):
     build_policy = "missing"
     options = { "shared": [True, False] }
     default_options = "shared=False"
+    pure_c = False
 
     def source(self):
         tools.download("https://github.com/maxmind/libmaxminddb/releases/download/{0}/" \
