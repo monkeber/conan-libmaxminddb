@@ -14,6 +14,9 @@ class MaxminddbConan(ConanFile):
     default_options = "shared=False"
     pure_c = False
 
+    def imports(self):
+        self.copy("*.h*", dst="include")
+
     def source(self):
         tools.download("https://github.com/maxmind/libmaxminddb/releases/download/{0}/" \
             "libmaxminddb-{0}.tar.gz".format(self.version), "libmaxminddb.tar.gz")
@@ -23,25 +26,34 @@ class MaxminddbConan(ConanFile):
     def build(self):
         env_build = AutoToolsBuildEnvironment(self)
 
-        args = list()
+        config_args = list()
+        config_args.append("--disable-tests")
+        config_args.append("--disable-shared")
+
         if self.settings.build_type == "Debug":
-            args.append("--enable-debug")
+            config_args.append("--enable-debug")
 
         env_build.configure(configure_dir="libmaxminddb-{}".format(self.version),
-            args=args)
+            args=config_args)
         self.run("cp -r libmaxminddb-{}/* .".format(self.version))
-        env_build.make(args=["CXXFLAGS:=$(CXXFLAGS) -std=gnu99"])
+        env_build.make(args=[
+            "CPPFLAGS:=$(CPPFLAGS) -std=gnu99",
+            "CFLAGS:=$(CFLAGS) -std=c99"])
         env_build.install()
 
     def package(self):
-        self.copy("*.h*", dst="include", keep_path=False)
+        self.copy("*.h", src="libmaxminddb-{}/include".format(self.version), dst="include")
+        self.copy("*.h", src="libmaxminddb-{}/include".format(self.version), dst="include", keep_path=False)
         self.copy("*maxminddb.lib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
-        if self.options.shared:
-            self.copy("*.dll", dst="bin", keep_path=False)
-            self.copy("*.so", dst="lib", keep_path=False)
-            self.copy("*.so.0", dst="lib", keep_path=False)
-            self.copy("*.dylib", dst="lib", keep_path=False)
+        self.copy("*.la", dst="lib", keep_path=False)
+        self.copy("*.dll", dst="bin", keep_path=False)
+        self.copy("*.so*", dst="lib", keep_path=False)
+        self.copy("*.dylib", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["maxminddb"]
+        self.cpp_info.libs = tools.collect_libs(self)
+        self.cpp_info.libdirs = ["lib"]
+        self.cpp_info.includedirs = ["include"]
+        self.env_info.CMAKE_PREFIX_PATH.append(self.package_folder)
+        self.env_info.CONAN_INCLUDE_DIRS.append(os.path.join(self.package_folder, "include"))
