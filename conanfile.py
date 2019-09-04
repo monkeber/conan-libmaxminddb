@@ -1,6 +1,4 @@
-from conans import ConanFile, tools, AutoToolsBuildEnvironment
-import os
-
+from conans import ConanFile, tools, CMake
 
 class MaxminddbConan(ConanFile):
     name = "maxminddb"
@@ -15,33 +13,20 @@ class MaxminddbConan(ConanFile):
     pure_c = False
 
     def source(self):
-        tools.download("https://github.com/maxmind/libmaxminddb/releases/download/{0}/" \
-            "libmaxminddb-{0}.tar.gz".format(self.version), "libmaxminddb.tar.gz")
-        tools.unzip("libmaxminddb.tar.gz")
-        os.unlink("libmaxminddb.tar.gz")
+        git = tools.Git(folder="maxminddb")
+        git.clone("https://github.com/monkeber/libmaxminddb.git")
+        git.checkout_submodules(submodule="recursive")
 
     def build(self):
-        env_build = AutoToolsBuildEnvironment(self)
-
-        args = list()
-        if self.settings.build_type == "Debug":
-            args.append("--enable-debug")
-
-        env_build.configure(configure_dir="libmaxminddb-{}".format(self.version),
-            args=args)
-        self.run("cp -r libmaxminddb-{}/* .".format(self.version))
-        env_build.make(args=["CXXFLAGS:=$(CXXFLAGS) -std=gnu99"])
-        env_build.install()
+        cmake = CMake(self)
+        cmake.configure(source_folder="maxminddb")
+        cmake.build()
 
     def package(self):
-        self.copy("*.h*", dst="include", keep_path=False)
-        self.copy("*maxminddb.lib", dst="lib", keep_path=False)
-        self.copy("*.a", dst="lib", keep_path=False)
-        if self.options.shared:
-            self.copy("*.dll", dst="bin", keep_path=False)
-            self.copy("*.so", dst="lib", keep_path=False)
-            self.copy("*.so.0", dst="lib", keep_path=False)
-            self.copy("*.dylib", dst="lib", keep_path=False)
+        self.copy("*.h*", dst="include", src="maxminddb/include", keep_path=False)
+        self.copy("*.*", dst="lib", src="maxminddb/src/.libs", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["maxminddb"]
+        self.cpp_info.includedirs = ["include"]
+        self.cpp_info.libdirs = ["lib"]
