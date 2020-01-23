@@ -24,7 +24,13 @@ class MaxminddbConan(ConanFile):
 
     def package(self):
         self.copy("*.h*", dst="include", src="maxminddb/include", keep_path=False)
-        self.copy("*.*", dst="lib", src="maxminddb/src/.libs", keep_path=False)
+        if self.options.shared:
+            self.copy("*.dll", dst="bin", keep_path=False)
+            self.copy("*.so*", dst="lib", src="maxminddb/src/.libs", keep_path=False)
+            self.copy("*.dylib", dst="lib", src="maxminddb/src/.libs", keep_path=False)
+        else:
+            self.copy("*.lib", dst="lib", keep_path=False)
+            self.copy("*.a", dst="lib", src="maxminddb/src/.libs", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["maxminddb"]
